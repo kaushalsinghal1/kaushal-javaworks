@@ -24,14 +24,13 @@ public class ObjectPoolImpl<T> implements ObjectPool<T> {
 			return null;	
 		}
 		usedCount++;
-		if (queue.isEmpty()) {
-			return objectFactory.createNew();
-		}
-		T obj = queue.poll();
-		if (validator.isValid(obj)) {
-			return obj;
-		} else {
-			validator.invalidate(obj);
+		while(!queue.isEmpty()){
+			T obj = queue.poll();
+			if (validator.isValid(obj)) {
+				return obj;
+			} else {
+				validator.invalidate(obj);
+			}
 		}
 		return objectFactory.createNew();
 	}
